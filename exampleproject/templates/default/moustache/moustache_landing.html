@@ -33,9 +33,25 @@
 
     <div id="babe-calendar">
         <table>
-            <tr>
-                <td> </td>
-            </tr>
+			{% for date in babe_calendar_list|slice:":6" %}
+			<tr><td>{{ date }}</td></tr>
+			{% endfor %}
+			
+			{% for date in babe_calendar_list|slice:"6:13" %}
+			<tr><td>{{ date }}</td></tr>
+			{% endfor %}
+			
+			{% for date in babe_calendar_list|slice:"13:20" %}
+			<tr><td>{{ date }}</td></tr>
+			{% endfor %}
+			
+			{% for date in babe_calendar_list|slice:"20:27" %}
+			<tr><td>{{ date }}</td></tr>
+			{% endfor %}
+			
+			{% for date in babe_calendar_list|slice:"27:34" %}
+			<tr><td>{{ date }}</td></tr>
+			{% endfor %}
         </table>
     </div>
 
