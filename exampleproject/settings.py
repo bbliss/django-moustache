@@ -78,7 +78,7 @@ MEDIA_URL = '/site_media/'
 ADMIN_MEDIA_PREFIX = '/media/'
 #ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-STATIC_ROOT = PROJECT_ROOT + '/static/'
+STATIC_ROOT = PROJECT_ROOT + 'static/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'i(!m=u+c($d7fm(yy&xu^bsvf#!uvzbx-hte4q7qh+icamueyt'
