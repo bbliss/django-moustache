@@ -8,7 +8,24 @@
             <img src="{{babe.pic1.url}}">
             <p>{{babe.description}}</p>
         </div>
-        
+
+        <div id="babe-ratings">
+            <form action="" method="POST">
+                <input type="radio" name="babevote" value="1">1
+                <input type="radio" name="babevote" value="2">2
+                <input type="radio" name="babevote" value="3">3
+                <input type="radio" name="babevote" value="4">4
+                <input type="radio" name="babevote" value="5">5
+                <input type="radio" name="babevote" value="6">6
+                <input type="radio" name="babevote" value="7">7
+                <input type="radio" name="babevote" value="8">8
+                <input type="radio" name="babevote" value="9">9
+                <input type="radio" name="babevote" value="10">10
+                
+                <button class="submit" name="submit" type="submit">Vote</button>
+            </form>
+        </div>
+
         <div class="babe-thumb">
             <a href="#"><img src="{{babe.pic1.url}}"></a>
         </div>
@@ -55,8 +72,7 @@
         </table>
     </div>
 
-    <div id="babe-ratings">
-    </div>
+
 
     <div id="babe-comments">
     <!--DISQUS-->
