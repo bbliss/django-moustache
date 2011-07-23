@@ -37,7 +37,7 @@ DEBUG_TOOLBAR_CONFIG = {
     'HIDE_DJANGO_SQL': True,
 }
 
-STATIC_URL = '/static/'
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -78,7 +78,8 @@ MEDIA_URL = '/site_media/'
 ADMIN_MEDIA_PREFIX = '/media/'
 #ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-STATIC_ROOT = PROJECT_ROOT + 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'i(!m=u+c($d7fm(yy&xu^bsvf#!uvzbx-hte4q7qh+icamueyt'
