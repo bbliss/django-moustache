@@ -1,6 +1,13 @@
 /* django-moustache default stylesheet */
 
-#babe-container { width: 670px; margin: 0 auto; }
+#content-wrapper { width: 1000px; clear: both; margin: 0 auto; padding: 10px 0px 20px 0px; background: #fff; }
+#col-1 { width: 670px; float: left; margin: 0 10px 0 0; }
+#col-2 { width: 300px; float: right; }
+.ad-300x250 { width: 300px; height: 250px; margin: 0 0 10px 0; list-style-type: none; clear:both; }
 
-#babe-picture { width: 650px; margin: 0 auto; }
-.babe-thumb { width: 200px; height: 250px; }
+#babe-container { width: 670px; margin: 0 auto; font-family: 'Mako', sans-serif; }
+
+#babe-picture { width: 650px; }
+#babe-picture img { width: 650px; height: 850px; }
+.babe-thumb { width: 100px; height: 150px; margin: 5px; float: left; }
+.babe-thumb img { width: 100px; height: 150px; }
