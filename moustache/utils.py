@@ -12,4 +12,8 @@ def create_dummy_babes():
         Babe.objects.create(
             description='dummy babe ' + str(i),
             date = datetime.date.today + datetime.timedelta(days=1),
-            pic1 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg')
+            pic1 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
+            pic2 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
+            pic3 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
+            pic4 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
+            pic5 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
