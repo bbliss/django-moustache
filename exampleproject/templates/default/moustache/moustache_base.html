@@ -1,10 +1,13 @@
-{%  extends "base.html" %}
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}apps/moustache/css/moustache.css" />
+{% endblock %}
 
 <div id="col-1">
+{% block content %}
 {% block babe-container %}{% endblock %}
-{% block babe-calendar %}{% endblock %}
-{% block babe-ratings %}{% endblock %}
-{% block babe-comments %}{% endblock %}
+{% endblock %}
 </div>
 
 <div id="col-2">

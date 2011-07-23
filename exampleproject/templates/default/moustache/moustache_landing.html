@@ -1,39 +1,42 @@
-{% extends "moustache-base.html" %}
+{% extends "moustache/moustache_base.html" %}
 
 {% block babe-container %}
-<div id="babe-container">
-	<div id="babe-picture">
-		<img src="http://placekitten.com/650/1000" title="Damn this kitten is sexi" alt="Meowww" />
-	</div>
-	
-	<div class="babe-thumb">
-		<img src="http://placekitten.com/200/250" title="Damn this kitten is sexi" alt="Meowww" />
-	</div>
-	
-	<div class="babe-thumb">
-		<img src="http://placekitten.com/200/250" title="Damn this kitten is sexi" alt="Meowww" />
-	</div>
-	
-</div>
-{% endblock %}
+    <div id="babe-container">
 
-{% block babe-calendar %}
-<div id="babe-calendar">
-	<table>
-		<tr>
-			<td> </td>
-		</tr>
-	</table>
-</div>
-{% endblock %}
+        {{babe.description}}
 
-{% block babe-ratings %}
-<div id="babe-ratings">
-</div>
-{% endblock %}
+        <img src="{{babe.pic1.url}}">
+        <img src="{{babe.pic2.url}}">
+        <img src="{{babe.pic3.url}}">
+        <img src="{{babe.pic4.url}}">
+        <img src="{{babe.pic5.url}}">
 
-{% block babe-comments %}
-<div id="babe-comments">
-<!--DISQUS-->
-</div>
+        <div id="babe-picture">
+            <img src="http://placekitten.com/650/1000" title="Damn this kitten is sexi" alt="Meowww" />
+        </div>
+        
+        <div class="babe-thumb">
+            <img src="http://placekitten.com/200/250" title="Damn this kitten is sexi" alt="Meowww" />
+        </div>
+        
+        <div class="babe-thumb">
+            <img src="http://placekitten.com/200/250" title="Damn this kitten is sexi" alt="Meowww" />
+        </div>
+        
+    </div>
+
+    <div id="babe-calendar">
+        <table>
+            <tr>
+                <td> </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="babe-ratings">
+    </div>
+
+    <div id="babe-comments">
+    <!--DISQUS-->
+    </div>
 {% endblock %}

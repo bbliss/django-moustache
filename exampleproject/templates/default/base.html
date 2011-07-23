@@ -1,13 +1,12 @@
 <html>
-
-
+<head>
 {% block head %}
-	{{ block.super }}
-	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}apps/moustache/css/moustache.css" />
 {% endblock %}
+</head>
 
-{% block content-wrapper-class %}moustache{% endblock content-wrapper-class %}
-
+<body>
 {% block content %}
-
 {% endblock content %}
+</body>
+
+</html>
