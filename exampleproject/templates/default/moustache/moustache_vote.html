@@ -1,0 +1,22 @@
+{% extends "moustache/moustache_base.html" %}
+
+{% block babe-container %}
+    <div id="babe-container">
+        {{babe.description}}   
+    
+        <form action="" method="POST">
+            <input type="radio" name="babevote" value="1">1
+            <input type="radio" name="babevote" value="2">2
+            <input type="radio" name="babevote" value="3">3
+            <input type="radio" name="babevote" value="4">4
+            <input type="radio" name="babevote" value="5">5
+            <input type="radio" name="babevote" value="6">6
+            <input type="radio" name="babevote" value="7">7
+            <input type="radio" name="babevote" value="8">8
+            <input type="radio" name="babevote" value="9">9
+            <input type="radio" name="babevote" value="10">10
+            
+            <button class="submit" name="submit" type="submit">Vote</button>
+        </form>
+    </div>
+{% endblock %}

@@ -7,4 +7,8 @@ urlpatterns = patterns('moustache.views',
         'moustache_landing',
         name='moustache_landing'
     ),
+    url(r'^vote/$',
+        'moustache_vote',
+        name='moustache_vote'
+    ),
 )

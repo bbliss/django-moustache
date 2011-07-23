@@ -14,6 +14,22 @@ def moustache_landing(request):
     herf = 'derf'
     babe = Babe.objects.all()[0]
     
+    babe_list = []
+    for i in range(1, 35):
+        babe_list.append(i)
+    
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,
-    }, context_instance = RequestContext(request)) 
+        'babe_calendar_list': babe_list,
+    }, context_instance = RequestContext(request))
+    
+def moustache_vote(request):
+    
+    babe = Babe.objects.all()[0]
+    
+    #if request.method == "POST":
+        
+    
+    return render_to_response('moustache/moustache_vote.html', {
+        'babe': babe,
+    }, context_instance = RequestContext(request))
