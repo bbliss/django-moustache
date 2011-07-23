@@ -1,1 +1,6 @@
 /* django-moustache default stylesheet */
+
+#babe-container { width: 670px; margin: 0 auto; }
+
+#babe-picture { width: 650px; margin: 0 auto; }
+.babe-thumb { width: 200px; height: 250px; }

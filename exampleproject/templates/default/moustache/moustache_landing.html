@@ -1,3 +1,39 @@
-<h1>Victory</h1>
+{% extends "moustache-base.html" %}
 
-{{ babe }}
+{% block babe-container %}
+<div id="babe-container">
+	<div id="babe-picture">
+		<img src="http://placekitten.com/650/1000" title="Damn this kitten is sexi" alt="Meowww" />
+	</div>
+	
+	<div class="babe-thumb">
+		<img src="http://placekitten.com/200/250" title="Damn this kitten is sexi" alt="Meowww" />
+	</div>
+	
+	<div class="babe-thumb">
+		<img src="http://placekitten.com/200/250" title="Damn this kitten is sexi" alt="Meowww" />
+	</div>
+	
+</div>
+{% endblock %}
+
+{% block babe-calendar %}
+<div id="babe-calendar">
+	<table>
+		<tr>
+			<td> </td>
+		</tr>
+	</table>
+</div>
+{% endblock %}
+
+{% block babe-ratings %}
+<div id="babe-ratings">
+</div>
+{% endblock %}
+
+{% block babe-comments %}
+<div id="babe-comments">
+<!--DISQUS-->
+</div>
+{% endblock %}
