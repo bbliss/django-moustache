@@ -2,14 +2,22 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="/static/apps/moustache/css/moustache.css" />
+<link href='http://fonts.googleapis.com/css?family=Mako&v2' rel='stylesheet' type='text/css'>
 {% endblock %}
 
-<div id="col-1">
 {% block content %}
-{% block babe-container %}{% endblock %}
+<div id="content-wrapper">
+
+	<div id="col-1">
+	{% block babe-container %}{% endblock %}
+	</div>
+
+	<div id="col-2">
+	<img class="ad-300x250" src="http://placekitten.com/300/250" />
+	<img class="ad-300x250" src="http://placekitten.com/300/250" />
+	<img class="ad-300x250" src="http://placekitten.com/300/250" />
+	<img class="ad-300x250" src="http://placekitten.com/300/250" />
+	</div>
+	
+</div>
 {% endblock %}
-</div>
-
-<div id="col-2">
-
-</div>
