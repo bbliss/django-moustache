@@ -11,3 +11,8 @@
 #babe-picture img { width: 650px; height: 850px; }
 .babe-thumb { width: 100px; height: 150px; margin: 5px; float: left; }
 .babe-thumb img { width: 100px; height: 150px; }
+
+#babe-calendar { float: left;}
+#babe-calendar table { width: 280px; margin: 0 auto; }
+#babe-calendar tr { border: 1px solid #000; width: 40px; height: 40px; float: left; }
+#babe-calendar td { }
