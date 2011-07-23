@@ -76,7 +76,21 @@
 			<tr><td>{{ date }}</td></tr>
 			{% endfor %}
         </table>
+
+        <h2>Babe Dict</h2>
+        {% for day, item in babe_calendar_dict.items %}
+            <span>{{day}}<br><img src="{{item.pic1.url}}" width="60" height="60"></span><br>
+        {% endfor %}
+            
+        <h2>Babe Tuples</h2>
+        {% for b_day, b_item in babe_tuples %}
+            <a href="{{b_item.get_absolute_url}}">
+            <span>{{b_day}}<br><img src="{{b_item.pic1.url}}" width="60" height="60"></span><br>
+            </a>
+        {% endfor %}
     </div>
+
+
 
     <div id="babe-comments">
     <!--DISQUS-->

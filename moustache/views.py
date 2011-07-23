@@ -13,14 +13,32 @@ def landing(request):
     
     babe = Babe.objects.all()[0]
     error_msg = rate_babe(request, babe)
-            
+    
+    babes_for_calendar = Babe.objects.filter(date__month=datetime.date.today().month).order_by('date')
+    print "babes for cal:", babes_for_calendar
+    
+    babe_dict = {}
+    for item in babes_for_calendar:
+        babe_dict[str(item.date.day)] = item
+    print "babe dict:", babe_dict
+    
+    babe_tuples = []
+    for item in babes_for_calendar:
+        babe_tuples.append( (item.date.day, item) )
+    
+    print "babe tuples:", babe_tuples
+    
     babe_list = []
     for i in range(1, 36):
         babe_list.append(i)
-        
+    
+    
+    
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,
         'babe_calendar_list': babe_list,
+        'babe_calendar_dict': babe_dict,
+        'babe_tuples': babe_tuples,
         'error_msg': error_msg,
     }, context_instance = RequestContext(request))
 

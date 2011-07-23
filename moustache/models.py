@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 
@@ -20,3 +21,6 @@ class Babe(models.Model):
             return 'Babe for ' + str(self.date) + ' (' + self.description + ')'
         else:
             return 'Babe for ' + str(self.date)
+            
+    def get_absolute_url(self):
+        return reverse('moustache_babe_detail', args=[self.id])
