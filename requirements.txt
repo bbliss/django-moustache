@@ -1,0 +1,5 @@
+Django==1.2.3
+django-imagekit
+PIL==1.1.7
+sorl-thumbnail=3.2.5
+south=0.7.1
