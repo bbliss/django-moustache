@@ -4,11 +4,12 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = patterns('moustache.views',
     
     url(r'^$',
-        'moustache_landing',
+        'landing',
         name='moustache_landing'
     ),
-    url(r'^vote/$',
-        'moustache_vote',
-        name='moustache_vote'
+
+    url(r'^babe/(?P<babe_id>\d+)/$',
+        'babe_detail',
+        name='moustache_babe_detail',
     ),
 )

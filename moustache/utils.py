@@ -2,18 +2,31 @@ import datetime
 import os
 from PIL import Image
 
+from django.conf import settings
+from django.core.files import File
+
 from moustache.models import Babe
 
 def create_dummy_babes():
     today = datetime.date.today()
-    dummy_image = 
-
-    for i in range(1, 365):
-        Babe.objects.create(
+    print "today:", today
+    
+    for i in range(0, 365):
+        p1 = File(open(settings.MEDIA_ROOT + 'moustache/babe1.jpg', 'rb'))
+        p2 = File(open(settings.MEDIA_ROOT + 'moustache/babe1.jpg', 'rb'))
+        p3 = File(open(settings.MEDIA_ROOT + 'moustache/babe1.jpg', 'rb'))
+        p4 = File(open(settings.MEDIA_ROOT + 'moustache/babe1.jpg', 'rb'))
+        p5 = File(open(settings.MEDIA_ROOT + 'moustache/babe1.jpg', 'rb'))
+        
+        le_babe = Babe.objects.create(
             description='dummy babe ' + str(i),
-            date = datetime.date.today + datetime.timedelta(days=1),
-            pic1 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
-            pic2 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
-            pic3 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
-            pic4 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
-            pic5 = Image.open(settings.MEDIA_ROOT + 'moustache/babe1.jpg'),
+            date = today + datetime.timedelta(days=i),
+            pic1 = p1,
+            pic2 = p2,
+            pic3 = p3,
+            pic4 = p4,
+            pic5 = p5,
+            rating = 5.5,
+            rating_count = 3
+        )
+        le_babe.save()

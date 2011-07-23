@@ -16,4 +16,7 @@ class Babe(models.Model):
     rating_count = models.IntegerField()
     
     def __unicode__(self):
-        return 'Babe (' + self.description + ')'
+        if self.description:
+            return 'Babe for ' + str(self.date) + ' (' + self.description + ')'
+        else:
+            return 'Babe for ' + str(self.date)
