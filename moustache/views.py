@@ -11,7 +11,9 @@ from moustache.models import Babe
 
 def landing(request):
     
-    babe = Babe.objects.all()[0]
+    today = datetime.date.today()
+    
+    babe = Babe.objects.filter(date__day=today.day, date__month=today.month)
     error_msg = rate_babe(request, babe)
     
     babes_for_calendar = Babe.objects.filter(date__month=datetime.date.today().month).order_by('date')
@@ -66,14 +68,14 @@ def rate_babe(request, babe):
         if babe.id in babes_rated:
             error_msg = 'You have already rated this babe!'
         else:
-            babes_rated.append(babe.id)
-            request.session['babes_rated'] = babes_rated
-            
-            babe_vote = request.POST['babevote']
+            babe_vote = request.POST.get('babevote', 0)
             if not ( int(babe_vote) in range(1, 11) ):
                 babe_vote = None
                 error_msg = 'Please select a vote from 1 to 10!'
             else:
+                babes_rated.append(babe.id)
+                request.session['babes_rated'] = babes_rated
+                
                 babe.rating = (babe.rating * babe.rating_count + int(babe_vote)) / (babe.rating_count + 1)
                 babe.rating_count = babe.rating_count + 1
                 babe.save()
