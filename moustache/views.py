@@ -13,34 +13,17 @@ def landing(request):
     
     today = datetime.date.today()
     
-    babe = Babe.objects.filter(date__day=today.day, date__month=today.month)
+    babe = Babe.objects.filter(date__day=today.day, date__month=today.month)[0]
     error_msg = rate_babe(request, babe)
     
-    babes_for_calendar = Babe.objects.filter(date__month=datetime.date.today().month).order_by('date')
-    print "babes for cal:", babes_for_calendar
-    
-    babe_dict = {}
-    for item in babes_for_calendar:
-        babe_dict[str(item.date.day)] = item
-    print "babe dict:", babe_dict
-    
-    babe_tuples = []
-    for item in babes_for_calendar:
-        babe_tuples.append( (item.date.day, item) )
-    
-    print "babe tuples:", babe_tuples
-    
-    babe_list = []
-    for i in range(1, 36):
-        babe_list.append(i)
-    
-    
+    recent_babes = Babe.objects.filter(
+        date__lt=babe.date, 
+        date__gte=(babe.date - datetime.timedelta(days=3))
+    )[:3]
     
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,
-        'babe_calendar_list': babe_list,
-        'babe_calendar_dict': babe_dict,
-        'babe_tuples': babe_tuples,
+        'recent_babes': recent_babes,
         'error_msg': error_msg,
     }, context_instance = RequestContext(request))
 
@@ -49,13 +32,14 @@ def babe_detail(request, babe_id):
     babe = get_object_or_404(Babe, pk=babe_id)
     error_msg = rate_babe(request, babe)
             
-    babe_list = []
-    for i in range(1, 36):
-        babe_list.append(i)
-        
+    recent_babes = Babe.objects.filter(
+        date__lt=babe.date, 
+        date__gte=(babe.date - datetime.timedelta(days=3))
+    )[:3]
+    
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,
-        'babe_calendar_list': babe_list,
+        'recent_babes': recent_babes,
         'error_msg': error_msg,
     }, context_instance = RequestContext(request))
     
