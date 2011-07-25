@@ -19,7 +19,7 @@ def landing(request):
     recent_babes = Babe.objects.filter(
         date__lt=babe.date, 
         date__gte=(babe.date - datetime.timedelta(days=3))
-    )[:3]
+    ).order_by('date')[:3]
     
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,
