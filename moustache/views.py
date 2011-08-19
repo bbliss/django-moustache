@@ -52,9 +52,11 @@ def babe_calendar(request, month=datetime.datetime.today().month):
         raise Http404
     
     first_weekday = calendar_babes[0].date.weekday()
+    print "first weekday:", first_weekday
     blank_days = []
     for i in range(0, int(first_weekday)):
         blank_days.append('day')
+        print "adding for i:", i
     
     return render_to_response('moustache/moustache_calendar.html', {
         'calendar_babes': calendar_babes,
