@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.http import Http404
 from django.template import RequestContext
-from django.shortcuts import get_object_or_404, render_to_response, redirect
+from django.shortcuts import get_object_or_404, render_to_response, redirect, render
 
 from moustache.models import Babe
 
@@ -30,12 +30,18 @@ def landing(request):
 
 def babe_detail(request, babe_id):
     
-    babe = get_object_or_404(Babe, pk=babe_id)
-            
-    recent_babes = Babe.objects.filter(
-        date__lt=babe.date, 
-        date__gte=(babe.date - datetime.timedelta(days=3))
-    ).order_by('date')[:3]
+    cname = 'babe_detail_' + str(babe_id)
+    cached_babe = cache.get(cname)
+    if cached_babe:
+        (babe, recent_babes) = cached_babe
+    else:
+        babe = get_object_or_404(Babe, pk=babe_id)
+                
+        recent_babes = Babe.objects.filter(
+            date__lt=babe.date, 
+            date__gte=(babe.date - datetime.timedelta(days=3))
+        ).order_by('date')[:3]
+        cache.set(cname, (babe, recent_babes), 60 * 30)
     
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,
@@ -44,24 +50,67 @@ def babe_detail(request, babe_id):
    
 def babe_calendar(request, month=datetime.datetime.today().month):
     
-    calendar_babes = Babe.objects.filter(
-        date__month=month,
-    ).order_by('date')
+    # Figure out what months should be viewable, for now this is the current
+    # month and the 3 previous months.
+    today = datetime.datetime.today()                  
+    acceptable_months = [today.month,
+                        (today.month + 11) % 12,
+                        (today.month + 10) % 12,
+                        (today.month + 9) % 12,]
     
-    if not calendar_babes:
-        raise Http404
+    # Display a notice if the month requested is unavailable.
+    if not int(month) in acceptable_months:
+        return render(request, 'moustache/moustache_calendar.html', {
+            'babe_month_unavailable': True,
+        })
     
+    cname = 'babe_calendar_' + str(month)
+    cached_babes = cache.get(cname)
+    if cached_babes:
+        calendar_babes = cached_babes
+    else:
+        # Fetch the babes from the database.
+        calendar_babes = Babe.objects.filter(
+            date__month=month,
+        ).order_by('date')
+        if not calendar_babes:
+            raise Http404
+        else:
+            cache.set(cname, calendar_babes, 60 * 30)
+    
+    # Figure out if we need to pad the calendar with blank days.
     first_weekday = calendar_babes[0].date.weekday()
-    print "first weekday:", first_weekday
     blank_days = []
-    for i in range(0, int(first_weekday)):
+    for i in range(0, int(first_weekday) + 1):
+        if int(first_weekday) == 6:
+            break
         blank_days.append('day')
-        print "adding for i:", i
+    
+    # Figure out what the next and previous months are.
+    next_month = (int(month) + 1) % 12
+    prev_month = (int(month) + 11) % 12
+    
+    # Determine what the links to previous and next months should be, if those
+    # months are within the available range.
+    next_month_id = prev_month_id = None
+    if next_month in acceptable_months:
+        next_month_id = next_month        
+    if prev_month in acceptable_months:
+        prev_month_id = prev_month
+    
+    # Grab the string for the requested month's name.
+    month_map = ['January', 'February', 'March', 'April', 'May', 'June',
+                 'July', 'August', 'September', 'October', 'November', 'December']
+    month_string = month_map[int(month) - 1]
     
     return render_to_response('moustache/moustache_calendar.html', {
         'calendar_babes': calendar_babes,
         'first_weekday': calendar_babes[0].date.weekday,
         'blank_days': blank_days,
+        'month_string': month_string,
+        'prev_month': prev_month_id,
+        'next_month': next_month_id,
+        'babe_month_unavailable': False,
     }, context_instance = RequestContext(request))
     
 def ajax_rate_babe(request):
