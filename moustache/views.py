@@ -8,6 +8,7 @@ from django.http import Http404
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response, redirect, render
 
+
 from moustache.models import Babe
 
 def landing(request):
@@ -72,6 +73,7 @@ def babe_calendar(request, month=datetime.datetime.today().month):
         # Fetch the babes from the database.
         calendar_babes = Babe.objects.filter(
             date__month=month,
+            #date__day=today.day,
         ).order_by('date')
         if not calendar_babes:
             raise Http404
@@ -103,6 +105,15 @@ def babe_calendar(request, month=datetime.datetime.today().month):
                  'July', 'August', 'September', 'October', 'November', 'December']
     month_string = month_map[int(month) - 1]
     
+    # If the month being viewed is not the current month, show all days.
+    print "month:", month
+    print "today.month:", today.month
+    if int(month) == today.month:
+        todays_day = today.day
+        print "setting day to", todays_day
+    else:
+        todays_day = 40
+    
     return render_to_response('moustache/moustache_calendar.html', {
         'calendar_babes': calendar_babes,
         'first_weekday': calendar_babes[0].date.weekday,
@@ -110,6 +121,7 @@ def babe_calendar(request, month=datetime.datetime.today().month):
         'month_string': month_string,
         'prev_month': prev_month_id,
         'next_month': next_month_id,
+        'todays_day': todays_day,
         'babe_month_unavailable': False,
     }, context_instance = RequestContext(request))
     
