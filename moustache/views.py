@@ -14,15 +14,21 @@ from moustache.models import Babe
 def landing(request):
     
     today = datetime.date.today()
-    babe = Babe.objects.filter(date__day=today.day, date__month=today.month)[0]
-    
-    if not babe:
-        raise Http404
-    
-    recent_babes = Babe.objects.filter(
-        date__lt=babe.date, 
-        date__gte=(babe.date - datetime.timedelta(days=3))
-    ).order_by('date')[:3]
+    cname = 'babe_today'
+    cached_babe = cache.get(cname)
+    if cached_babe:
+        (babe, recent_babes) = cached_babe
+    else:
+        try:
+            babe = Babe.objects.filter(date__day=today.day, date__month=today.month)[0]
+        except IndexError:
+            raise Http404
+        
+        recent_babes = Babe.objects.filter(
+            date__lt=babe.date, 
+            date__gte=(babe.date - datetime.timedelta(days=3))
+        ).order_by('date')[:3]
+        cache.set(cname, (babe, recent_babes), 60 * 5)
     
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,

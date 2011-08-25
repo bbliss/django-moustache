@@ -14,7 +14,7 @@ class GetBabe(template.Node):
         try:
             today = datetime.date.today()
             babe = Babe.objects.filter(date__day=today.day, date__month=today.month)
-            context[self.var_name] = babe[0]
+            context[self.var_name] = babe[0]    
         except:
             context[self.var_name] = None
         
