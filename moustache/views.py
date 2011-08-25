@@ -55,8 +55,8 @@ def babe_calendar(request, month=datetime.datetime.today().month):
     today = datetime.datetime.today()                  
     acceptable_months = [today.month,
                         (today.month + 11) % 12,
-                        (today.month + 10) % 12,
-                        (today.month + 9) % 12,]
+                        (today.month + 10) % 12,]
+                        #(today.month + 9) % 12,]
     
     # Display a notice if the month requested is unavailable.
     if not int(month) in acceptable_months:
@@ -120,10 +120,11 @@ def ajax_rate_babe(request):
      
     babe_id = request.POST.get('babe', None)
     babe_rating = request.POST.get('babe-rating', None)
-        
+    your_rating = babe_rating
+    
     babe = get_object_or_404(Babe, pk=babe_id) #Babe.objects.filter(pk=babe_id)[0]
     
-    error_msg = "You rated this babe a " + str(babe_rating) + "!"
+    error_msg = None
     new_rating = babe.rating
     
     if request.method == "POST":
@@ -147,5 +148,6 @@ def ajax_rate_babe(request):
     return render_to_response('moustache/moustache_voting.html', {
         'new_rating': new_rating,
         'error_msg': error_msg,
+        'your_rating': your_rating
     }, context_instance = RequestContext(request))
     
