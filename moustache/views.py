@@ -163,6 +163,9 @@ def ajax_rate_babe(request):
                 new_rating = babe.rating
                 babe.save()
     
+    if error_msg:
+        your_rating = None
+    
     return render_to_response('moustache/moustache_voting.html', {
         'new_rating': new_rating,
         'error_msg': error_msg,
