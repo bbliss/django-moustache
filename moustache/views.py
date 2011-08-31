@@ -51,6 +51,12 @@ def babe_detail(request, babe_id):
         ).order_by('date')[:3]
         cache.set(cname, (babe, recent_babes), 60 * 30)
     
+    max_date = datetime.date.today()
+    min_date = datetime.date.today() - datetime.timedelta(days=90)
+    
+    if babe.date < min_date or babe.date > max_date:
+        raise Http404
+    
     return render_to_response('moustache/moustache_landing.html', {
         'babe': babe,
         'recent_babes': recent_babes,
@@ -75,6 +81,28 @@ def babe_calendar(request, month=datetime.datetime.today().month):
     next_month = (int(month) + 1) % 12
     prev_month = (int(month) + 11) % 12
     
+    # Determine what the links to previous and next months should be, if those
+    # months are within the available range.
+    next_month_id = prev_month_id = None
+    if next_month in acceptable_months:
+        next_month_id = next_month        
+    if prev_month in acceptable_months:
+        prev_month_id = prev_month
+    
+    # Get a human readable string for the current month
+    month_map = ['January', 'February', 'March', 'April', 'May', 'June',
+                 'July', 'August', 'September', 'October', 'November', 'December']
+    month_string = month_map[int(month) - 1]
+    
+    # If we already did the work for this view and cached it, render with it.
+    cname = 'babe_calendar_' + str(month)
+    cached_weeks = cache.get(cname)
+    if cached_weeks:
+        return render(request, 'moustache/moustache_calendar_new.html', {
+            'weeks': cached_weeks,
+            'current_month': month_string,
+        })
+    
     # Grab the main set of babes for the month
     calendar_babes = Babe.objects.filter(
         date__month=month,
@@ -86,7 +114,7 @@ def babe_calendar(request, month=datetime.datetime.today().month):
         date__gt=today,
     ).order_by('date')
     
-    # Get the dates for the main babes
+    # Get the dates for the main and upcoming babes
     calendar_babe_dates = calendar_babes.values_list('date')
     upcoming_babe_dates = upcoming_babes.values_list('date')
 
@@ -114,125 +142,31 @@ def babe_calendar(request, month=datetime.datetime.today().month):
     for i in range(0, trailing_days_quantity):
         trailing_days.append(datetime.date(month=next_month, year=2011, day=(i + 1)))
     
-    
-    day_babe_tuple_list = []
-    # put all the babes and days into a list of tuples
+    # Put all the babes and days into a list of dictionaries
+    day_dict_list = []
     for i, day in enumerate(leading_days):
-        day_babe_tuple_list.append({'date': day, 'babe': leading_babes[i], 'class': 'leading'})
+        day_dict_list.append({'date': day, 'babe': leading_babes[i], 'class': 'leading'})
     for i, day in enumerate(calendar_babe_dates):
-        day_babe_tuple_list.append({'date': day[0], 'babe': calendar_babes[i], 'class': 'active'})
+        day_dict_list.append({'date': day[0], 'babe': calendar_babes[i], 'class': 'active'})
     for i, day in enumerate(upcoming_babe_dates):
-        day_babe_tuple_list.append({'date': day[0], 'babe': upcoming_babes[i], 'class': 'upcoming'})
+        day_dict_list.append({'date': day[0], 'babe': upcoming_babes[i], 'class': 'upcoming'})
     for day in trailing_days:
-        day_babe_tuple_list.append({'date': day, 'babe': None, 'class': 'blank'})
+        day_dict_list.append({'date': day, 'babe': None, 'class': 'blank'})
     
+    # Split the list of dictionaries into lists for each week so that they're
+    # Easy to display in <tr> on the template.
     weeks = []
-    for i in range(0, len(day_babe_tuple_list), 7):
-        weeks.append(day_babe_tuple_list[i:i+7])
+    for i in range(0, len(day_dict_list), 7):
+        weeks.append(day_dict_list[i:i+7])
         
-    # Get a human readable string for the current month
-    month_map = ['January', 'February', 'March', 'April', 'May', 'June',
-                 'July', 'August', 'September', 'October', 'November', 'December']
-    month_string = month_map[int(month) - 1]
+    cache.set(cname, weeks, 60 * 30)
     
     return render(request, 'moustache/moustache_calendar_new.html', {
+        'prev_month': prev_month_id,
+        'next_month': next_month_id,
         'weeks': weeks,
         'current_month': month_string,
     })
-
-
-def babe_calendar_old(request, month=datetime.datetime.today().month):
-    
-    # Figure out what months should be viewable, for now this is the current
-    # month and the 3 previous months.
-    today = datetime.datetime.today()
-    acceptable_months = [today.month,
-                        (today.month + 11) % 12,
-                        (today.month + 10) % 12,]
-                        #(today.month + 9) % 12,]
-    
-    # Display a notice if the month requested is unavailable.
-    if not int(month) in acceptable_months:
-        return render(request, 'moustache/moustache_calendar.html', {
-            'babe_month_unavailable': True,
-        })
-    
-    cname = 'babe_calendar_' + str(month)
-    cached_babes = cache.get(cname)
-    if cached_babes:
-        calendar_babes = cached_babes
-    else:
-        # Fetch the babes from the database.
-        calendar_babes = Babe.objects.filter(
-            date__month=month,
-            #date__day=today.day,
-        ).order_by('date')
-        if not calendar_babes:
-            raise Http404
-        else:
-            cache.set(cname, calendar_babes, 60 * 30)
-    
-    # Figure out if we need to pad the calendar with blank days.
-    first_weekday = calendar_babes[0].date.weekday()
-    blank_days = []
-    for i in range(0, int(first_weekday) + 1):
-        if int(first_weekday) == 6:
-            break
-        blank_days.append('day')
-    
-    # Figure out what the next and previous months are.
-    next_month = (int(month) + 1) % 12
-    prev_month = (int(month) + 11) % 12
-    
-    # Determine what the links to previous and next months should be, if those
-    # months are within the available range.
-    next_month_id = prev_month_id = None
-    if next_month in acceptable_months:
-        next_month_id = next_month        
-    if prev_month in acceptable_months:
-        prev_month_id = prev_month
-    
-    # Grab the string for the requested month's name.
-    month_map = ['January', 'February', 'March', 'April', 'May', 'June',
-                 'July', 'August', 'September', 'October', 'November', 'December']
-    month_string = month_map[int(month) - 1]
-    
-    # If the month being viewed is not the current month, show all days.
-    print "month:", month
-    print "today.month:", today.month
-    if int(month) == today.month:
-        todays_day = today.day
-        print "setting day to", todays_day
-        
-        
-        
-        
-        
-        todays_day = 13
-        #getting number of days in the current month
-        import calendar
-        max_days = calendar.monthrange(datetime.date.today().year, today.month)[1]
-        trailing_dates = []
-        i = 1
-        while i <= max_days - todays_day:
-            trailing_dates.append(datetime.date(month=today.month, day=todays_day + i, year=today.year))
-            i = i + 1
-        
-        print "trailing:", trailing_dates
-    else:
-        todays_day = 40
-    
-    return render_to_response('moustache/moustache_calendar.html', {
-        'calendar_babes': calendar_babes,
-        'first_weekday': calendar_babes[0].date.weekday,
-        'blank_days': blank_days,
-        'trailing_days': trailing_dates,
-        'month_string': month_string,
-        'prev_month': prev_month_id,
-        'next_month': next_month_id,
-        'todays_day': todays_day,
-        'babe_month_unavailable': False,
-    }, context_instance = RequestContext(request))
     
 def ajax_rate_babe(request):
     
@@ -243,13 +177,17 @@ def ajax_rate_babe(request):
     babe_rating = request.POST.get('babe-rating', None)
     your_rating = babe_rating
     
-    babe = get_object_or_404(Babe, pk=babe_id) #Babe.objects.filter(pk=babe_id)[0]
+    print "babe_id:", babe_id
+    print "babe_rating:", babe_rating
+    
+    babe = get_object_or_404(Babe, pk=babe_id)
     
     error_msg = None
     new_rating = babe.rating
     
     if request.method == "POST":
         babes_rated = request.session.get('babes_rated', [])
+        print "babes rated:", babes_rated
         if babe.id in babes_rated:
             error_msg = 'You have already rated this babe!'
         else:
@@ -268,6 +206,8 @@ def ajax_rate_babe(request):
     
     if error_msg:
         your_rating = None
+        
+    print "passing to template:", new_rating, error_msg, your_rating
     
     return render_to_response('moustache/moustache_voting.html', {
         'new_rating': new_rating,

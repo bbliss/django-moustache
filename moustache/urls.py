@@ -22,11 +22,6 @@ urlpatterns = patterns('moustache.views',
         name='moustache_babe_calendar',
     ),
     
-    url(r'^oldcalendar/(?P<month>\d+)/$',
-        'babe_calendar_old',
-        name='moustache_babe_calendar_old',
-    ),
-    
     url(r'^ajax/vote/$',
         'ajax_rate_babe',
         name='moustache_ajax_rate_babe',
