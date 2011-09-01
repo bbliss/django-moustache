@@ -101,6 +101,8 @@ def babe_calendar(request, month=datetime.datetime.today().month):
         return render(request, 'moustache/moustache_calendar_new.html', {
             'weeks': cached_weeks,
             'current_month': month_string,
+            'next_month': next_month_id,
+            'prev_month': prev_month_id,
         })
     
     # Grab the main set of babes for the month
