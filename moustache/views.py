@@ -66,7 +66,7 @@ def babe_calendar(request, month=datetime.datetime.today().month):
 
     # Figure out what months should be viewable, for now this is the current
     # month and the 3 previous months.
-    today = datetime.datetime.today() - datetime.timedelta(days=6)                  
+    today = datetime.datetime.today()
     acceptable_months = [today.month,
                         (today.month + 11) % 12,
                         (today.month + 10) % 12,]
@@ -177,9 +177,6 @@ def ajax_rate_babe(request):
     babe_rating = request.POST.get('babe-rating', None)
     your_rating = babe_rating
     
-    print "babe_id:", babe_id
-    print "babe_rating:", babe_rating
-    
     babe = get_object_or_404(Babe, pk=babe_id)
     
     error_msg = None
@@ -187,7 +184,6 @@ def ajax_rate_babe(request):
     
     if request.method == "POST":
         babes_rated = request.session.get('babes_rated', [])
-        print "babes rated:", babes_rated
         if babe.id in babes_rated:
             error_msg = 'You have already rated this babe!'
         else:
@@ -206,12 +202,11 @@ def ajax_rate_babe(request):
     
     if error_msg:
         your_rating = None
-        
-    print "passing to template:", new_rating, error_msg, your_rating
-    
+            
     return render_to_response('moustache/moustache_voting.html', {
         'new_rating': new_rating,
         'error_msg': error_msg,
-        'your_rating': your_rating
+        'your_rating': your_rating,
+        'another_babe_id': int(babe_id) - 1
     }, context_instance = RequestContext(request))
     
