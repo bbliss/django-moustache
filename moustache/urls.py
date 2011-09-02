@@ -1,25 +1,23 @@
 from django.conf.urls.defaults import *
 from django.contrib.auth.decorators import login_required
 
-urlpatterns = patterns('moustache.views',
-    
+urlpatterns = patterns('moustache.views',   
     url(r'^$',
-        'landing',
-        name='moustache_landing'
-    ),
-
-    url(r'^babe/(?P<babe_id>\d+)/$',
         'babe_detail',
-        name='moustache_babe_detail',
+        name='moustache_babe_current',
+    ),   
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$',
+        'babe_detail',
+        name='moustache_babe'
     ),
     
+    url(r'^calendar/(?P<year>\d{4})/(?P<month>\d{2})/$',
+        'babe_calendar',
+        name='moustache_calendar',
+    ),
     url(r'^calendar/$',
         'babe_calendar',
-        name='moustache_babe_calendar_current',
-    ),
-    url(r'^calendar/(?P<month>\d+)/$',
-        'babe_calendar',
-        name='moustache_babe_calendar',
+        name='moustache_calendar_current',
     ),
     
     url(r'^ajax/vote/$',

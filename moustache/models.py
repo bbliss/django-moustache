@@ -24,4 +24,5 @@ class Babe(models.Model):
             return 'Babe for ' + str(self.date)
             
     def get_absolute_url(self):
-        return reverse('moustache_babe_detail', args=[self.id])
+        return reverse('moustache_babe', args=[
+            self.date.year, str(self.date.month).zfill(2), str(self.date.day).zfill(2)])
