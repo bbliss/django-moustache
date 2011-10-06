@@ -123,7 +123,7 @@ def babe_calendar(request, year=None, month=None):
             year=(last_of_month + datetime.timedelta(days=1)).year, day=(i + 1)))
 
     #Grab the last few babes from the previous month to complete the calendar row
-    leading_days_quantity = (first_of_month.weekday() + 7) % 6
+    leading_days_quantity = (first_of_month.weekday() + 1) % 7
     leading_babes = list(Babe.objects.filter(date__lt=first_of_month).order_by('-date')[:leading_days_quantity])
     leading_babes.reverse()
     
