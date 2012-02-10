@@ -1,5 +1,5 @@
-import datetime
 from django import template
+from django.utils import timezone
 
 from moustache.models import Babe
 
@@ -12,7 +12,7 @@ class GetBabe(template.Node):
     def render(self, context):
         
         try:
-            today = datetime.date.today()
+            today = timezone.now().date()
             babe = Babe.objects.filter(date__day=today.day, date__month=today.month)
             context[self.var_name] = babe[0]    
         except:

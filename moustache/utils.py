@@ -8,7 +8,6 @@ from django.core.files import File
 from moustache.models import Babe
 
 def create_dummy_babes():
-    #today = datetime.date.today()
     today = datetime.date(day=1, month=1, year=2011)
     print "today:", today
     

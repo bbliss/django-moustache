@@ -8,7 +8,7 @@ from django.core.cache import cache
 from django.http import Http404
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response, redirect, render
-
+from django.utils import timezone
 
 from moustache.models import Babe
 
@@ -17,9 +17,9 @@ def babe_detail(request, year=None, month=None, day=None):
     try:
         babe_date = datetime.date(year=int(year), month=int(month), day=int(day))
     except TypeError:
-        babe_date = datetime.date.today()
+        babe_date = timezone.now().date()
     
-    today = datetime.date.today()
+    today = timezone.now().date()
     first_of_todays_month = datetime.date(day=1, month=today.month, year=today.year)
     max_date = today
     min_date = first_of_todays_month - datetime.timedelta(days=68)
@@ -49,7 +49,7 @@ def babe_calendar(request, year=None, month=None):
     
     # Calculate the first and last days of the month, rendering an unavailable
     # message if babes older than 60 days would be shown.
-    today = datetime.date.today()
+    today = timezone.now().date()
     first_of_todays_month = datetime.date(day=1, month=today.month, year=today.year)
     try:
         first_of_month = datetime.date(year=int(year), month=int(month), day=1)

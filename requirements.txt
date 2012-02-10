@@ -1,4 +1,4 @@
-Django==1.2.3
+Django>=1.4
 django-imagekit
 PIL==1.1.7
 sorl-thumbnail==3.2.5
