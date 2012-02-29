@@ -16,8 +16,11 @@ def babe_detail(request, year=None, month=None, day=None):
     
     try:
         babe_date = datetime.date(year=int(year), month=int(month), day=int(day))
-    except TypeError:
-        babe_date = timezone.now().date()
+    except (TypeError, ValueError):
+        if (year, month, day) == (None, None, None):
+            babe_date = timezone.now().date()
+        else:
+            raise Http404
     
     today = timezone.now().date()
     first_of_todays_month = datetime.date(day=1, month=today.month, year=today.year)
