@@ -13,7 +13,7 @@ class GetBabe(template.Node):
         
         try:
             today = timezone.now().date()
-            babe = Babe.objects.filter(date__day=today.day, date__month=today.month)
+            babe = Babe.objects.filter(date__day=today.day, date__month=today.month, date__year=today.year)
             context[self.var_name] = babe[0]    
         except:
             context[self.var_name] = None
